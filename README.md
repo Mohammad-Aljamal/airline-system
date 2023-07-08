@@ -10,4 +10,4 @@
 ## SOCKET.IO Lab 12
 
 ### [PR page](https://github.com/Mohammad-Aljamal/airline-system/pull/4)
-### [events code ](./socket.io/)
+### [socket.io code ](./socket.io/)
