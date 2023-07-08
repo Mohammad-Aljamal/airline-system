@@ -4,22 +4,28 @@ require('dotenv').config();
 const port = process.env.PORT || 3030;
 const io = require('socket.io-client');
 const host = `http://localhost:${port}/`;
-const managerConnection = io.connect(host);
+const systemConnection = io.connect(host);
+
+const airlineHost = `http://localhost:${port}/airline`;
+const airlineConnection = io.connect(airlineHost);
 
 
-
-
-managerConnection.on("new-flight",newFlight);
+airlineConnection.on("new-flight",newFlight);
 
 function newFlight(payload) {
-    setInterval(() => {
-        managerConnection.emit("took-off", payload);
+    setTimeout(() => {
         console.log(`flight with ID ‘${payload.Details.flightID}’ took-off`)
-
-        setInterval(() => {
-            managerConnection.emit("Arrived", payload);
-            console.log(`Pilot: flight with ID '${payload.Details.flightID}' has arrived`)
-        }, 3000);
-
+        payload.event = 'took-off';
+        airlineConnection.emit("took-off", payload);
     }, 4000);
+
+    setTimeout(() => {
+        console.log(`Pilot: flight with ID '${payload.Details.flightID}' has arrived`)
+        payload.event = 'Arrived';
+        systemConnection.emit("Arrived", payload);
+        systemConnection.emit('thanku',payload);
+    }, 7000);
 }
+
+
+
