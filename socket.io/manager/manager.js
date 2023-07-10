@@ -31,8 +31,11 @@ setInterval(() => {
 
   systemConnection.emit("new-flight", flightDetails);
 
-
 }, 10000);
+
+systemConnection.on('added-new-flight', (payload) => {
+  console.log(`Manager: The new flight is added ${payload.Details.flightID}`)
+})
 
 systemConnection.on('thanku', (payload) => {
   console.log(`Manager: we're greatly thankful for the amazing flight, ${payload.Details.pilotName}`)
