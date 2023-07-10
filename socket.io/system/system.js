@@ -42,16 +42,18 @@ ioServer.on("connection", (newSocket) => {
     })
   })
 
+
+  newSocket.on('received', (payload) => {
+    console.log('msgQueue v1', payload.Details)
+    delete queue.flights[payload.id];
+    console.log('msgQueue v2', queue.flights)
+    console.log('---------------------------------------------');
+    console.log('---------------------------------------------');
+
+  })
+
+
 });
-
-ioServer.on('received', (payload) => {
-  console.log('msgQueue v1', payload.Details)
-  delete queue.flights[payload.id];
-  console.log('msgQueue v2', queue)
-  console.log('---------------------------------------------');
-  console.log('---------------------------------------------');
-
-})
 
 const airline = ioServer.of('/airline');
 
