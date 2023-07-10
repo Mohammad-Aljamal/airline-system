@@ -1,30 +1,34 @@
-'use strict';
+"use strict";
 
-require('dotenv').config();
+require("dotenv").config();
 const port = process.env.PORT || 3030;
-const io = require('socket.io-client');
+const io = require("socket.io-client");
 const host = `http://localhost:${port}/`;
 const systemConnection = io.connect(host);
 
 const airlineHost = `http://localhost:${port}/airline`;
 const airlineConnection = io.connect(airlineHost);
 
+systemConnection.on("flight-pilot-status", newFlight);
 
-systemConnection.on("flight-pilot-status",newFlight);
+systemConnection.emit("get-all");
+
+systemConnection.on("new-flight-msg", (payload) => {
+  console.log("Pilot:Sorry i didnt catch this flight ID", payload.id);
+  console.log("i got it.");
+  systemConnection.emit("received", payload);
+});
 
 function newFlight(payload) {
-    setTimeout(() => {
-        console.log(`flight with ID ‘${payload.Details.flightID}’ took-off`)
-        payload.event = 'took-off';
-        airlineConnection.emit("took-off", payload);
-    }, 4000);
+  setTimeout(() => {
+    // console.log(`flight with ID ‘${payload.Details.flightID}’ took-off`)
+    payload.event = "took-off";
+    airlineConnection.emit("took-off", payload);
+  }, 4000);
 
-    setTimeout(() => {
-        console.log(`Pilot: flight with ID '${payload.Details.flightID}' has arrived`)
-        payload.event = 'Arrived';
-        systemConnection.emit("Arrived", payload);
-    }, 7000);
+  setTimeout(() => {
+    // console.log(`Pilot: flight with ID '${payload.Details.flightID}' has arrived`)
+    payload.event = "Arrived";
+    systemConnection.emit("Arrived", payload);
+  }, 7000);
 }
-
-
-
