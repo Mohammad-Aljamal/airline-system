@@ -10,7 +10,7 @@ const airlineHost = `http://localhost:${port}/airline`;
 const airlineConnection = io.connect(airlineHost);
 
 
-airlineConnection.on("new-flight",newFlight);
+systemConnection.on("flight-pilot-status",newFlight);
 
 function newFlight(payload) {
     setTimeout(() => {
@@ -23,7 +23,6 @@ function newFlight(payload) {
         console.log(`Pilot: flight with ID '${payload.Details.flightID}' has arrived`)
         payload.event = 'Arrived';
         systemConnection.emit("Arrived", payload);
-        systemConnection.emit('thanku',payload);
     }, 7000);
 }
 
