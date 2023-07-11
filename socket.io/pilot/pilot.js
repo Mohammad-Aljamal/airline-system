@@ -14,7 +14,7 @@ systemConnection.on("flight-pilot-status", newFlight);
 systemConnection.emit("get-all");
 
 systemConnection.on("new-flight-msg", (payload) => {
-  console.log("Pilot:Sorry i didnt catch this flight ID", payload.id);
+  console.log("Pilot:Sorry i didnt catch this flight ID", payload.id,payload.Details);
   console.log("i got it.");
   systemConnection.emit("received", payload);
 });
